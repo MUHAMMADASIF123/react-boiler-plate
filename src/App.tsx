@@ -1,35 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Sidebar from "./components/sideBar";
+import Topbar from "./components/topBar";
+import Dashboard from "./components/dashboard";
+import CurrentRoute from "./components/currentRoute";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation(); // Track route changes
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="flex h-screen bg-gray-100">
+      <Sidebar />
+      <div className="flex flex-col flex-1">
+        <Topbar />
+        <div className="p-4 overflow-auto">
+          {/* Display the current route at the top of the layout */}
+          <CurrentRoute currentRoute={location.pathname} />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/overview" element={<Dashboard />} />
+            <Route path="/reports" element={<Dashboard />} />
+            <Route path="/analytics" element={<Dashboard />} />
+            <Route path="/settings" element={<Dashboard />} />
+          </Routes>
+        </div>
       </div>
-      <h1>React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+function AppWrapper() {
+  return (
+    <Router>
+      <App />
+    </Router>
+  );
+}
+
+export default AppWrapper;
